@@ -1,18 +1,31 @@
 import renderFilter from "./render-filter";
-import renderCard from "./render-card";
 import {FILTERS_DATA, getTasksList} from "./data";
 import {getRandomInt} from "./utils";
+import {Task} from "./task";
+import {TaskEdit} from "./task-edit";
 
-const renderCards = (totalCatds) => {
-  const cardsFragment = document.createDocumentFragment();
-  const tasksList = getTasksList(totalCatds);
-  for (const task of tasksList) {
-    cardsFragment.appendChild(renderCard(task));
-  }
-
+const renderTasks = (totalTasks) => {
   const boardTasks = document.querySelector(`.board__tasks`);
   boardTasks.innerHTML = ``;
-  boardTasks.appendChild(cardsFragment);
+
+  const tasksList = getTasksList(totalTasks);
+  for (const taskData of tasksList) {
+    const task = new Task(taskData);
+    const editTask = new TaskEdit(taskData);
+    boardTasks.appendChild(task.render());
+    task.onEdit = () => {
+      editTask.render();
+      boardTasks.replaceChild(editTask.element, task.element);
+      task.unrender();
+    };
+
+    editTask.onSubmit = () => {
+      task.render();
+      boardTasks.replaceChild(task.element, editTask.element);
+      editTask.unrender();
+    };
+  }
+
 };
 
 const filterFragment = document.createDocumentFragment();
@@ -28,8 +41,8 @@ document.querySelector(`#filter__all`).checked = true;
 const filterInputs = document.querySelectorAll(`.filter__input`);
 filterInputs.forEach((it) => {
   it.addEventListener(`click`, () => {
-    renderCards(getRandomInt(5, 18));
+    renderTasks(getRandomInt(5, 18));
   });
 });
 
-renderCards(7);
+renderTasks(7);

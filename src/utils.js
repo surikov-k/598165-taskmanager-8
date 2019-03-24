@@ -18,3 +18,9 @@ export const getRandomFromArray = (array) => {
 export const isTaskRepeating = (task) => {
   return Object.values(task.repeatingDays).some((it) => it) ? true : false;
 };
+
+export const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+  return newElement.firstChild;
+};
