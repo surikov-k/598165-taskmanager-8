@@ -1,8 +1,9 @@
 import {MONTHS} from "./data";
-import {createElement} from "./utils";
+import {Component} from "./component";
 
-export class Task {
+export class Task extends Component {
   constructor(task) {
+    super();
     this._title = task.title;
     this._dueDate = task.dueDate;
     this._tags = task.tags;
@@ -11,21 +12,14 @@ export class Task {
     this._repeatingDays = task.repeatingDays;
     this._isFavorite = task.isFavorite;
     this._isDone = task.isDone;
-
-    this._element = null;
-    this._state = {
-    };
     this._onEdit = null;
+    this._onEditButtonClick = this._onEditButtonClick.bind(this);
   }
 
   _onEditButtonClick() {
     if (typeof this._onEdit === `function`) {
       this._onEdit();
     }
-  }
-
-  get element() {
-    return this._element;
   }
 
   set onEdit(fn) {
@@ -177,27 +171,11 @@ export class Task {
 
   bind() {
     this._element.querySelector(`.card__btn--edit`)
-        .addEventListener(`click`, this._onEditButtonClick
-          .bind(this));
+        .addEventListener(`click`, this._onEditButtonClick);
   }
 
   unbind() {
     this._element.querySelector(`.card__btn--edit`)
-      .removeEventListener(`click`, this._onEditButtonClick.bind(this));
-  }
-
-  render() {
-    if (this._element) {
-      this._element = null;
-    }
-    this._element = createElement(this.template);
-
-    this.bind();
-    return this._element;
-  }
-
-  unrender() {
-    this.unbind();
-    this._element = null;
+      .removeEventListener(`click`, this._onEditButtonClick);
   }
 }
