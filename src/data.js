@@ -1,20 +1,7 @@
 import {getRandomInt, getRandomFromArray, getRandomSetFromArray} from "./utils";
 
 const ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
-export const MONTHS = [
-  `January`,
-  `February`,
-  `March`,
-  `April`,
-  `May`,
-  `June`,
-  `July`,
-  `August`,
-  `September`,
-  `October`,
-  `November`,
-  `December`
-];
+
 export const WEEK_DAYS = [
   `Monday`,
   `Tuesday`,
@@ -70,13 +57,13 @@ const tagsList = [
   `keks`
 ];
 
-const colors = [
-  `black`,
-  `yellow`,
-  `blue`,
-  `green`,
-  `pink`
-];
+export const Color = {
+  blue: `card--blue`,
+  black: `card--black`,
+  yellow: `card--yellow`,
+  green: `card--green`,
+  pink: `card--pink`
+};
 
 const makeSomeTaskRepeating = () => {
   const days = {
@@ -106,7 +93,7 @@ export const task = () => {
     dueDate: Date.now() + getRandomInt(-ONE_WEEK, ONE_WEEK),
     tags: getRandomSetFromArray(getRandomInt(0, 3), tagsList),
     picture: `http://picsum.photos/100/100?r=${Math.random()}`,
-    color: getRandomFromArray(colors),
+    color: getRandomFromArray(Object.keys(Color)),
     repeatingDays: makeSomeTaskRepeating(),
     isFavorite: false,
     isDone: false,

@@ -4,30 +4,6 @@ import {getRandomInt} from "./utils";
 import {Task} from "./task";
 import {TaskEdit} from "./task-edit";
 
-const renderTasks = (totalTasks) => {
-  const boardTasks = document.querySelector(`.board__tasks`);
-  boardTasks.innerHTML = ``;
-
-  const tasksList = getTasksList(totalTasks);
-  for (const taskData of tasksList) {
-    const task = new Task(taskData);
-    const editTask = new TaskEdit(taskData);
-    boardTasks.appendChild(task.render());
-    task.onEdit = () => {
-      editTask.render();
-      boardTasks.replaceChild(editTask.element, task.element);
-      task.unrender();
-    };
-
-    editTask.onSubmit = () => {
-      task.render();
-      boardTasks.replaceChild(task.element, editTask.element);
-      editTask.unrender();
-    };
-  }
-
-};
-
 const filterFragment = document.createDocumentFragment();
 FILTERS_DATA.forEach((it) => {
   filterFragment.appendChild(renderFilter(it.name, it.count));
@@ -45,4 +21,36 @@ filterInputs.forEach((it) => {
   });
 });
 
+
+const boardTasks = document.querySelector(`.board__tasks`);
+
+const renderTasks = (amount) => {
+  boardTasks.innerHTML = ``;
+  const tasksList = getTasksList(amount);
+  for (const task of tasksList) {
+    const taskComponent = new Task(task);
+    const editTaskComponent = new TaskEdit(task);
+    boardTasks.appendChild(taskComponent.render());
+
+    taskComponent.onEdit = () => {
+      editTaskComponent.render();
+      boardTasks.replaceChild(editTaskComponent.element, taskComponent.element);
+      taskComponent.unrender();
+    };
+
+    editTaskComponent.onSubmit = (newObject) => {
+      task.title = newObject.title;
+      task.tags = newObject.tags;
+      task.color = newObject.color;
+      task.repeatingDays = newObject.repeatingDays;
+      task.dueDate = newObject.dueDate;
+
+      taskComponent.update(task);
+      taskComponent.render();
+      boardTasks.replaceChild(taskComponent.element, editTaskComponent.element);
+      editTaskComponent.unrender();
+    };
+  }
+};
 renderTasks(7);
+
