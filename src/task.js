@@ -1,4 +1,4 @@
-import {MONTHS} from "./data";
+import {MONTHS, Color} from "./data";
 import {Component} from "./component";
 
 export class Task extends Component {
@@ -28,11 +28,6 @@ export class Task extends Component {
 
   _isRepeating() {
     return Object.values(this._repeatingDays).some((it) => it === true);
-  }
-
-  _taskClassList() {
-    const repeatClass = this._isRepeating() ? `card--repeat` : ``;
-    return `card card--${this._color} ${repeatClass}`;
   }
 
   _taskDates() {
@@ -125,7 +120,7 @@ export class Task extends Component {
 
   get template() {
     return `
-      <article class="${this._taskClassList()}">
+      <article class="card ${Color[this._color]} ${this._isRepeating() ? `card--repeat` : ``}">
           <div class="card__inner">
             <div class="card__control">
               <button type="button" class="card__btn card__btn--edit">
@@ -177,5 +172,12 @@ export class Task extends Component {
   unbind() {
     this._element.querySelector(`.card__btn--edit`)
       .removeEventListener(`click`, this._onEditButtonClick);
+  }
+
+  update(data) {
+    this._title = data.title;
+    this._tags = data.tags;
+    this._color = data.color;
+    this._repeatingDays = data.repeatingDays;
   }
 }
